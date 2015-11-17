@@ -1,0 +1,19 @@
+from visual import*
+
+t = text(text ="Welcome to Shuffleboard! \n To play click anywhere",spacing = (.4), pos = (0,5,0), align = 'center', depth = -.3, color = color.cyan)
+#beginning of game
+def main():
+    if scene.waitfor('click'):
+        t.visible = False
+        board()
+
+#gameboard board
+def board():
+    floor = box(pos =vector(0,0,0), size=(7, 2, 40), color=color.orange, material=materials.wood )
+    bottom = box(pos=vector(0,-1,0), size= (10, 1 , 45), color = color.green, material = materials.wood)
+    left = box(pos=vector(-5.5,0,0), size = (1,3,45),color=color.gray(.9) , material = materials.marble)
+    right = box(pos=vector(5.5,0,0), size = (1,3,45),color=color.gray(.9) , material = materials.marble)
+    back = box(pos = vector(0,0,-24), size = (12,3,3), color = color.gray(.9), material = materials.marble)                                           
+    front =box(pos = vector(0,0,24), size = (12,3,3), color = color.gray(.9), material = materials.marble) 
+#gameboard score
+main()
