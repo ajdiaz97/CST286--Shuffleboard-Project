@@ -6,34 +6,68 @@ from visual import*
 #                                                                                     #
 #######################################################################################
 
-t = text(text ="Welcome to Shuffleboard! \n To play click anywhere",spacing = (.4), pos = (0,5,0), align = 'center', depth = -.3, color = color.cyan)
+t = text(text ="Welcome to Shuffleboard! \n To play click anywhere",spacing = (.4), pos = (0,5,0),
+         align = 'center', depth = -.3, color = color.cyan)
+r = text(text ="Here are the rules for Shuffleboard!! \n At one end of the board is scoring zones \n Yellow is one point, White is two points, and Blue is three points. If the puck goes over that counts as no points. \n The front side is the side you slide the puck. To direct the puck use the Left and Right keys. \n To launch the puck push the Spacebar. \n GOOD LUCK!",  
+    spacing = (.6), pos = (0,5,0), align = 'center', depth = -.3, color = color.cyan)
+r.visible = False
 #beginning of game
-puck = ring(pos =(0,5,26) , axis=(0,1,0), radius = .5, thickness = .4, color = color.red, mass = 10)
+puck = ring(pos =(0,5,22) , axis=(0,1,0), radius = .5, thickness = .4, color = color.red, mass = 10)
+arrow = arrow( pos = puck.pos, axis = vector(0,0,-5), shaftwidth = .5, color = color.orange)
 puck.visible = False
 dt = .01
 puck.velocity= vector(0,-1,0)
+arrow.visible = False
 def title():
     if scene.waitfor('click'):
         t.visible = False
+        r.visible = True
+        rules()
+def rules():
+    if scene.waitfor('click'):
+        r.visible= False
         game()
+        
 #gameboard board
 def game():
-    f = frame()
-    floor = box(frame = f, pos =vector(0,0,0), size=(11, 2, 50), color=color.orange, material=materials.wood )
-    florr = box(frame = f, pos = vector(0,1.25,0), size= (11, .5, 50), color = color.orange, material= materials.wood)
-    bottom = box(frame = f, pos=vector(0,-1,0), size= (14, 1 , 60), color = color.green, material = materials.wood)
-    left = box(frame = f,pos=vector(-7.5,0,0), size = (1,3,63),color=color.gray(.9) , material = materials.marble)
-    right = box(frame = f, pos=vector(7.5,0,0), size = (1,3,63),color=color.gray(.9) , material = materials.marble)
-    back = box(frame = f, pos = vector(0,0,-30), size = (14,3,3), color = color.gray(.9), material = materials.marble)                                           
-    front =box(frame = f, pos = vector(0,0,30), size = (14,3,3), color = color.gray(.9), material = materials.marble) 
+    scene.range = 40
+    floor = box(pos =vector(0,0,0), size=(11, 2, 50), color=color.orange, material=materials.wood )
+    florr = box(pos = vector(0,1.25,0), size= (11, .5, 50), color = color.orange, material= materials.wood)
+    bottom = box(pos=vector(0,-1,0), size= (14, 1 , 60), color = color.green, material = materials.wood)
+    left = box(pos=vector(-7.5,0,0), size = (1,3,63),color=color.gray(.9) , material = materials.marble)
+    right = box(pos=vector(7.5,0,0), size = (1,3,63),color=color.gray(.9) , material = materials.marble)
+    back = box(pos = vector(0,0,-30), size = (14,3,3), color = color.gray(.9), material = materials.marble)                                           
+    front =box(pos = vector(0,0,30), size = (14,3,3), color = color.gray(.9), material = materials.marble)
+    point1 = box(pos = vector(0,1.4,-15), size =(11,1,4), color = color.yellow)
+    point2 = box(pos = vector(0,1.4,-19), size =(11,1,4), color = color.white)
+    point3 = box(pos = vector(0,1.4,-23), size =(11,1,4), color = color.blue)
     puck.visible = True
+    arrow.visible = True
 #puck gravity
     while True:
-        rate(100)
+        rate(980)
         lol = 1.5
         ayy_lmao= .6
-        if puck.pos.y < florr.pos.y + ayy_lmao  or puck.pos.y < bottom.pos.y +lol:
+        right = 1
+        left= -1
+        if puck.pos.y < florr.pos.y + ayy_lmao:
             puck.velocity.y = False
         puck.pos = puck.pos + puck.velocity*dt
+        arrow.pos = puck.pos
+    
+        if scene.kb.keys:
+            k = scene.kb.getkey()
+            if k == "right":
+                arrow.axis.x = arrow.axis.x + right
+                if arrow.axis.x > 3:
+                    arrow.axis.x = arrow.axis.x + left
+            if k == "left":
+                arrow.axis.x = arrow.axis.x + left
+                if arrow.axis.x < -3:
+                    arrow.axis.x = arrow.axis.x + right
+            if k == " ":
+                puck.pos = puck.pos + arrow.axis/2
 #gameboard score
 title()
+
+
